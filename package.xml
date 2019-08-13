@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>aftership</name>
-    <version>0.3.4</version>
+    <version>0.3.5</version>
     <stability>stable</stability>
     <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL</license>
     <channel>community</channel>
@@ -10,8 +10,8 @@
     <description>Users can simply link their online stores to Aftership and view all packages in one place. Online stores can also automatically inform their customers of the latest delivery status through SMS, email and Twitter. All the messages are white-labeled and can be customized for any marketing opportunities. Aftership also provides online stores a reporting tool so that they can easily find out any shipping problems like delayed delivery and solve immediately. Aftership currently supports over 200 shipping companies worldwide.</description>
     <notes>Updated API to v4</notes>
     <authors><author><name>aftership</name><user>aftership</user><email>support@aftership.com</email></author></authors>
-    <date>2015-02-24</date>
-    <time>03:15:41</time>
+    <date>2017-02-20</date>
+    <time>18:00:00</time>
     <contents><target name="magecommunity"><dir name="Aftership"><dir name="Track"><dir name="Helper"><file name="Data.php" hash="854baf793cb348f80c94703b585691b9"/></dir><dir name="Model"><file name="FrequencyWords.php" hash="91aad25bcba1c0f8433ab0f297f50614"/><file name="Methods.php" hash="ee6ccd73ab94405e8b0ab4a59990a0fa"/><dir name="Mysql4"><dir name="Track"><file name="Collection.php" hash="b359845af660063396556b37920675ad"/></dir><file name="Track.php" hash="e7799ea4fef0ff7e4217ae0d3a3ed50e"/></dir><file name="Observer.php" hash="b200f9bdca4a179464e4e9d19e95facb"/><dir name="Resource"><dir name="Mysql4"><file name="Setup.php" hash="9a1fee597d5f7219cd3f68f38bb1ed97"/></dir></dir><file name="Track.php" hash="61bae429d01ace637296e11994203fe5"/><file name="Words.php" hash="40d412b8ea57998ae6429219b14709db"/></dir><dir name="controllers"><file name="IndexController.php" hash="7f5c1ae52f625152ca3e9ffe15a93028"/></dir><dir name="etc"><file name="adminhtml.xml" hash="cadc113478c285edf9f43c7506f6ba89"/><file name="config.xml" hash="0a217c95d63a5f9be1a92dfd9d2672f4"/><file name="system.xml" hash="bfd83204df3be87132971d15fbef8607"/></dir><dir name="sql"><dir name="track_setup"><file name="mysql4-install-0.3.2.php" hash="7639b6303191813f78441a6d7297e0d1"/><file name="mysql4-upgrade-0.2.9-0.3.2.php" hash="7639b6303191813f78441a6d7297e0d1"/></dir></dir></dir></dir></target><target name="mage"><dir name="app"><dir name="etc"><dir name="modules"><file name="Aftership_Track.xml" hash="25367ce0ec0484973a73e5548199dea0"/></dir></dir></dir></target><target name="mageskin"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="aftership"><dir name="css"><file name="style.css" hash="bd5df03e68aa767303eb392df394ce52"/></dir><dir name="images"><file name="logo.png" hash="3e8d8f9d5e1747c18fcd1a810ddc5f2a"/><file name=".DS_Store" hash="194577a7e20bdcc7afbb718f502c134c"/></dir><file name=".DS_Store" hash="e8931b980e8ec084f41ef4f99eeef0c3"/></dir></dir></dir></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="layout"><file name="aftership.xml" hash="263c8bb1e2ba9acbf017a2a44fb11439"/></dir></dir></dir></dir></target></contents>
     <compatible/>
     <dependencies><required><php><min>5.2.13</min><max>5.6.6</max></php></required></dependencies>

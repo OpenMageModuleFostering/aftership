@@ -10,4 +10,3 @@ class Aftership_Track_Model_Words
     }
 
 }
-?>

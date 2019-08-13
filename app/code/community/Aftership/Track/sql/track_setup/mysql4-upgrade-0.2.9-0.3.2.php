@@ -20,5 +20,3 @@ CREATE TABLE `{$installer->getTable('track/track')}` (
 
 ");
 $installer->endSetup();
-
-?>

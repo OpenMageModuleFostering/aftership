@@ -6,4 +6,3 @@ class Aftership_Track_Model_Mysql4_Track_Collection extends Mage_Core_Model_Mysq
             $this->_init('track/track');
     }
 }
-?>
