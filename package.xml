@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <package>
     <name>aftership</name>
-    <version>0.2.5</version>
+    <version>0.2.6</version>
     <stability>stable</stability>
     <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL</license>
     <channel>community</channel>
     <extends/>
     <summary>AfterShip magento extension interface. Tracking number will be added to the aftership.com &lt;https://www.aftership.com/&gt; account at the same time when input in magento shipment. Please go to aftership.com &lt;https://www.aftership.com/&gt; to change the notification setting and value.</summary>
     <description>Users can simply link their online stores to Aftership and view all packages in one place. Online stores can also automatically inform their customers of the latest delivery status through SMS, email and Twitter. All the messages are white-labeled and can be customized for any marketing opportunities. Aftership also provides online stores a reporting tool so that they can easily find out any shipping problems like delayed delivery and solve immediately. Aftership currently supports over 40 shipping companies worldwide.</description>
-    <notes>Fixed customer name</notes>
+    <notes>Changed PHP dependency version</notes>
     <authors><author><name>aftership</name><user>aftership</user><email>support@aftership.com</email></author></authors>
-    <date>2012-11-27</date>
-    <time>10:27:46</time>
-    <contents><target name="magecommunity"><dir name="Aftership"><dir name="Track"><dir name="Helper"><file name="Data.php" hash="970d03deb3e5fc478f5d86e5ff3670cb"/></dir><dir name="Model"><file name="Methods.php" hash="d9fa7ef3df0353c01662ff4bdf210f60"/><dir name="Mysql4"><dir name="Track"><file name="Collection.php" hash="336c4b0fba8db78e1222da01aa8c5744"/></dir><file name="Track.php" hash="90ad226fa98576fceb223b85fe88b642"/></dir><file name="Observer.php" hash="fe8111bdfc41cd9fd78af8e0dce6ed5e"/><dir name="Resource"><dir name="Mysql4"><file name="Setup.php" hash="b53f65ecc832752c8394f0da74b2f90d"/></dir></dir><file name="Track.php" hash="eb12833d5f084b0b919cbde45f8170eb"/><file name="Words.php" hash="7789e47b991f718fb3097b5e274eb71f"/></dir><dir name="controllers"><file name="IndexController.php" hash="3ee34f42957e816ff336f8f8215a218b"/></dir><dir name="etc"><file name="config.xml" hash="44b407dcd58774176a2a37191daf04a2"/><file name="system.xml" hash="857fa4fae0433c10ba468bff794ca9ef"/></dir><dir name="sql"><dir name="track_setup"><file name="mysql4-install-0.1.0.php" hash="a8f81083585c85a89e8a3097f5f3045c"/></dir></dir></dir></dir></target><target name="mage"><dir name="app"><dir name="etc"><dir name="modules"><file name="Aftership_Track.xml" hash="6518f61d8f390f4fc8a517b2b15b01d1"/></dir></dir></dir></target></contents>
+    <date>2012-12-18</date>
+    <time>10:02:35</time>
+    <contents><target name="magecommunity"><dir name="Aftership"><dir name="Track"><dir name="Helper"><file name="Data.php" hash="854baf793cb348f80c94703b585691b9"/></dir><dir name="Model"><file name="Methods.php" hash="ee6ccd73ab94405e8b0ab4a59990a0fa"/><dir name="Mysql4"><dir name="Track"><file name="Collection.php" hash="b359845af660063396556b37920675ad"/></dir><file name="Track.php" hash="e7799ea4fef0ff7e4217ae0d3a3ed50e"/></dir><file name="Observer.php" hash="87e8b2b2593e5e1b87fa8c282d7151f8"/><dir name="Resource"><dir name="Mysql4"><file name="Setup.php" hash="9a1fee597d5f7219cd3f68f38bb1ed97"/></dir></dir><file name="Track.php" hash="61bae429d01ace637296e11994203fe5"/><file name="Words.php" hash="40d412b8ea57998ae6429219b14709db"/></dir><dir name="controllers"><file name="IndexController.php" hash="7f5c1ae52f625152ca3e9ffe15a93028"/></dir><dir name="etc"><file name="config.xml" hash="1fef5c2ffa09abff28386c7f7979a399"/><file name="system.xml" hash="45dc0a90aa6f619006c7b930245e7879"/></dir><dir name="sql"><dir name="track_setup"><file name="mysql4-install-0.1.0.php" hash="6cfe686b1f1846396ff597956b99b692"/></dir></dir></dir></dir></target><target name="mage"><dir name="app"><dir name="etc"><dir name="modules"><file name="Aftership_Track.xml" hash="25367ce0ec0484973a73e5548199dea0"/></dir></dir></dir></target></contents>
     <compatible/>
-    <dependencies><required><php><min>5.2.13</min><max>5.4.8</max></php></required></dependencies>
+    <dependencies><required><php><min>5.2.13</min><max>5.4.9</max></php></required></dependencies>
 </package>

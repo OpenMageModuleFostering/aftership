@@ -2,150 +2,149 @@
 
 class Aftership_Track_Model_Observer
 {
-    public function salesOrderShipmentTrackSaveAfter(Varien_Event_Observer $observer)
-    {
-        ob_start();
-        $config = Mage::getStoreConfig('aftership_options/messages');
+	public function salesOrderShipmentTrackSaveAfter(Varien_Event_Observer $observer)
+	{
+		ob_start();
+		$config = Mage::getStoreConfig('aftership_options/messages');
 
-        $track = $observer->getEvent()->getTrack();
-        $track_data = $track->getData();
-        $order_data = $track->getShipment()->getOrder()->getData();
-        $shipment_data = $track->getShipment()->getData();
-        $shipping_address_data = $track->getShipment()->getOrder()->getShippingAddress()->getData();
-        if (strlen(trim($track_data["track_number"])) > 0) {
-            //1.6.2.0 or later
-            $track_no = trim($track_data["track_number"]);
-        } else {
-            //1.5.1.0
-            $track_no = trim($track_data["number"]);
-        }
+		$track = $observer->getEvent()->getTrack();
+		$track_data = $track->getData();
+		$order_data = $track->getShipment()->getOrder()->getData();
+		$shipment_data = $track->getShipment()->getData();
+		$shipping_address_data = $track->getShipment()->getOrder()->getShippingAddress()->getData();
+		if (strlen(trim($track_data["track_number"])) > 0) {
+			//1.6.2.0 or later
+			$track_no = trim($track_data["track_number"]);
+		} else {
+			//1.5.1.0
+			$track_no = trim($track_data["number"]);
+		}
 
-        $exist_track_data = Mage::getModel('track/track')
-            ->getCollection()
-            ->addFieldToFilter('tracking_number', array('eq' => $track_no))
-            ->addFieldToFilter('order_id', array('eq' => $order_data["order_id"]))
-            ->getData();
-
-
-        if (!$exist_track_data) {
-            $track = Mage::getModel('track/track');
-
-            $track->setTrackingNumber($track_no);
-
-            $track->setShipCompCode($track_data["carrier_code"]);
-            $track->setTitle($order_data["increment_id"]);
-
-            $track->setOrderId($order_data["increment_id"]);
-
-            if ($order_data["customer_email"] && $order_data["customer_email"] != "") {
-                $track->setEmail($order_data["customer_email"]);
-            }
-
-            if ($shipping_address_data["telephone"] && $shipping_address_data["telephone"] != "") {
-                $track->setTelephone($shipping_address_data["telephone"]);
-            }
-
-            if (array_key_exists("status", $config) && $config["status"]) {
-                $track->setPosted(0);
-            } else {
-                $track->setPosted(2);
-            }
-
-            $track->save();
-        }
+		$exist_track_data = Mage::getModel('track/track')
+			->getCollection()
+			->addFieldToFilter('tracking_number', array('eq' => $track_no))
+			->addFieldToFilter('order_id', array('eq' => $order_data["order_id"]))
+			->getData();
 
 
-        if (array_key_exists("status", $config) && $config["status"])
-        {
-            $api_key = $config["api_key"];
+		if (!$exist_track_data) {
+			$track = Mage::getModel('track/track');
 
-            $post_tracks = Mage::getModel('track/track')
-                ->getCollection()
-                ->addFieldToFilter('posted', array('eq' => 0))
-                ->getData();
+			$track->setTrackingNumber($track_no);
 
-            $url_params = array("api_key" => $api_key);
+			$track->setShipCompCode($track_data["carrier_code"]);
+			$track->setTitle($order_data["increment_id"]);
 
-            foreach ($post_tracks as $track) {
-                $url = "https://api.aftership.com/v1/trackings";
-                $url_params["tracking_number"] 	= $track["tracking_number"];
-                $url_params["smses[]"]        	= $track["telephone"];
-                $url_params["emails[]"]       	= $track["email"];
-                $url_params["title"]        	= $track["title"];
-                $url_params["order_id"]     	= $track["order_id"];
-                $url_params["customer_name"]    = $shipping_address_data["firstname"]." ".$shipping_address_data['lastname'];
-                $url_params["source"]     		= "magento";
+			$track->setOrderId($order_data["increment_id"]);
 
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $url_params);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-                curl_setopt($ch, CURLOPT_HEADER, 0);
-                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); //the SSL is not correct
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //the SSL is not correct
+			if ($order_data["customer_email"] && $order_data["customer_email"] != "") {
+				$track->setEmail($order_data["customer_email"]);
+			}
 
-                $response = curl_exec($ch);
-                $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                $error = curl_error($ch);
-                curl_close($ch);
-                $response_obj = json_decode($response, true);
+			if ($shipping_address_data["telephone"] && $shipping_address_data["telephone"] != "") {
+				$track->setTelephone($shipping_address_data["telephone"]);
+			}
 
-                if ($http_status == "201" || $http_status == "422") //422: repeated
-                {
-                    $track_obj = Mage::getModel('track/track');
-                    $track_obj->load($track["track_id"]);
-                    $track_obj->setPosted(1);
-                    $track_obj->save();
-                } else {
+			if (array_key_exists("status", $config) && $config["status"]) {
+				$track->setPosted(0);
+			} else {
+				$track->setPosted(2);
+			}
 
-                }
-            }
-        }
+			$track->save();
+		}
 
-        ob_end_clean();
-    }
 
-    public function adminSystemConfigChangedSectionAftership($obj)
-    {
-        $post_data = Mage::app()->getRequest()->getPost();
-        $api_key = $post_data["groups"]["messages"]["fields"]["api_key"]["value"];
-        if (!array_key_exists("notification", $post_data["groups"]["messages"]["fields"])) {
-            Mage::getModel('core/config')->saveConfig('aftership_options/messages/notification', 0);
-        }
+		if (array_key_exists("status", $config) && $config["status"])
+		{
+			$api_key = $config["api_key"];
 
-        $url_params = array(
-            "api_key" => $api_key
-        );
-        $url = "https://api.aftership.com/v1/users/authenticate";
+			$post_tracks = Mage::getModel('track/track')
+				->getCollection()
+				->addFieldToFilter('posted', array('eq' => 0))
+				->getData();
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($url_params));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			$url_params = array("api_key" => $api_key);
 
-        $response = curl_exec($ch);
-        $error = curl_error($ch);
-        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        $response_obj = json_decode($response, true);
+			foreach ($post_tracks as $track) {
+				$url = "https://api.aftership.com/v1/trackings";
+				$url_params["tracking_number"] 	= $track["tracking_number"];
+				$url_params["smses[]"]			= $track["telephone"];
+				$url_params["emails[]"]       	= $track["email"];
+				$url_params["title"]        	= $track["title"];
+				$url_params["order_id"]     	= $track["order_id"];
 
-        if ($http_status != "200" && $http_status != "401") {
-            Mage::getModel('core/config')->saveConfig('aftership_options/messages/status', 0);
-            Mage::throwException(Mage::helper('adminhtml')->__("Connection error, please try again later."));
-        } else {
-            if (!$response_obj["success"]) //error
-            {
-                Mage::getModel('core/config')->saveConfig('aftership_options/messages/status', 0);
-                Mage::throwException(Mage::helper('adminhtml')->__("Incorrect API Key"));
-            }
-        }
-    }
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $url_params);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); //the SSL is not correct
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //the SSL is not correct
+
+				$response = curl_exec($ch);
+				$http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+				$error = curl_error($ch);
+				curl_close($ch);
+				$response_obj = json_decode($response, true);
+
+				if ($http_status == "201" || $http_status == "422") //422: repeated
+				{
+					$track_obj = Mage::getModel('track/track');
+					$track_obj->load($track["track_id"]);
+					$track_obj->setPosted(1);
+					$track_obj->save();
+				} else {
+
+				}
+			}
+		}
+
+		ob_end_clean();
+	}
+
+	public function adminSystemConfigChangedSectionAftership($obj)
+	{
+		$post_data = Mage::app()->getRequest()->getPost();
+		$api_key = $post_data["groups"]["messages"]["fields"]["api_key"]["value"];
+		if (!array_key_exists("notification", $post_data["groups"]["messages"]["fields"])) {
+			Mage::getModel('core/config')->saveConfig('aftership_options/messages/notification', 0);
+		}
+
+		$url_params = array(
+			"api_key" => $api_key
+		);
+		$url = "https://api.aftership.com/v1/users/authenticate";
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($url_params));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+		$response = curl_exec($ch);
+		$error = curl_error($ch);
+		$http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		$response_obj = json_decode($response, true);
+
+		if ($http_status != "200" && $http_status != "401") {
+			Mage::getModel('core/config')->saveConfig('aftership_options/messages/status', 0);
+			Mage::throwException(Mage::helper('adminhtml')->__("Connection error, please try again later."));
+		} else {
+			if (!$response_obj["success"]) //error
+			{
+				Mage::getModel('core/config')->saveConfig('aftership_options/messages/status', 0);
+				Mage::throwException(Mage::helper('adminhtml')->__("Incorrect API Key"));
+			}
+		}
+	}
 }

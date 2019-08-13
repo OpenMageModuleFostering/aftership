@@ -29,7 +29,7 @@
 							<sort_order>10</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>   
+							<show_in_store>0</show_in_store>
 							<comment>You can find your API key in <![CDATA[<a target='_blank' href="https://www.aftership.com/connect/magento">https://www.aftership.com/connect/magento</a>]]></comment>
 						</api_key>
 						<status>
@@ -39,7 +39,7 @@
 							<sort_order>30</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>                    
+							<show_in_store>0</show_in_store>
 						</status>
 						<!--<notification>
 							<label>Notification</label>
@@ -48,11 +48,11 @@
 							<sort_order>40</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>                    
+							<show_in_store>0</show_in_store>
 						</notification>-->
-					</fields> 
+					</fields>
 				</messages>
 			</groups>
 		</aftership_options>
-	</sections> 
+	</sections>
 </config>
