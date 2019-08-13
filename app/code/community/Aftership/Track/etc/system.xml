@@ -9,6 +9,7 @@
 		<aftership_options translate="label" module="aftership">
 			<label>AfterShip Config Options</label>
 			<tab>aftershipconfig</tab>
+			<class>aftership-logo</class>
 			<frontend_type>text</frontend_type>
 			<sort_order>1000</sort_order>
 			<show_in_default>1</show_in_default>
@@ -41,6 +42,32 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>0</show_in_store>
 						</status>
+						<cron_job_enable>
+							<label>Enable Cron Job</label>
+							<frontend_type>Select</frontend_type>
+							<source_model>cron_job/words</source_model>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</cron_job_enable>
+						<cron_job_frequency>
+							<label>Cron Job Frequency</label>
+							<frontend_type>Select</frontend_type>
+							<source_model>cron_job/frequencywords</source_model>
+							<sort_order>50</sort_order>
+							<show_in_default>0</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</cron_job_frequency>
+						<last_update>
+							<label>Last Update</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>60</sort_order>
+							<show_in_default>0</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</last_update>
 						<!--<notification>
 							<label>Notification</label>
 							<frontend_type>Multiselect</frontend_type>

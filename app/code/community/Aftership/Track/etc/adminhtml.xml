@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+    <layout>
+        <updates>
+            <aftershipconfig module="Aftership_Track">
+                <file>aftership.xml</file>
+            </aftershipconfig>
+        </updates>
+    </layout>
+</config>

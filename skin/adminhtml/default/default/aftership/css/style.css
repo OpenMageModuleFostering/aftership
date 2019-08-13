@@ -1,0 +1,8 @@
+ul.tabs a.aftership-logo span, ul.tabs a.aftership-logo:hover span {
+	background: url("../images/logo.png") no-repeat scroll 0 0 transparent;
+	height: 0;
+	overflow: hidden;
+	padding: 24px 0px 0px 0px;
+	margin-left: 20px;
+	width: 192px;
+}

@@ -1,7 +1,16 @@
 <?xml version="1.0"?>
 <config>
+	<modules>
+		<Aftership_Track>
+			<version>0.2.9</version>
+		</Aftership_Track>
+	</modules>
+
 	<global>
 		<models>
+			<aftershiptrackcron>
+				<class>Aftership_Track_Model</class>
+			</aftershiptrackcron>
 			<track>
 				<class>Aftership_Track_Model</class>
 				<resourceModel>track_mysql4</resourceModel>
@@ -15,11 +24,14 @@
 					<!--<user>
 						<table>as_user</table>
 					</user>-->
-				</entities>			
+				</entities>
 			</track_mysql4>
 			<status>
 				<class>Aftership_Track_Model</class>
 			</status>
+			<cron_job>
+				<class>Aftership_Track_Model</class>
+			</cron_job>
 			<notification>
 				<class>Aftership_Track_Model</class>
 			</notification>
@@ -51,11 +63,20 @@
 			</aftership>
 		</helpers>
 	</global>
-    <modules>
-        <Aftership_Track>
-            <version>0.1.0</version>
-        </Aftership_Track>
-    </modules>
+
+	<crontab>
+		<jobs>
+			<aftershiptrackcron>
+				<schedule>
+					<cron_expr>0 */3 * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>aftershiptrackcron/observer::cron</model>
+				</run>
+			</aftershiptrackcron>
+		</jobs>
+	</crontab>
+
 	<frontend>
 		<routers>
 			<track>
@@ -67,7 +88,16 @@
 			</track>
 		</routers>
 	</frontend>
+
 	<adminhtml>
+		<layout>
+			<updates>
+				<aftershipconfig module="Aftership_Track">
+					<file>aftership.xml</file>
+				</aftershipconfig>
+			</updates>
+		</layout>
+
 		<events>
 			<sales_order_shipment_track_save_after>
 				<observers>

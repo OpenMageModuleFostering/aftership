@@ -1,5 +1,5 @@
 <?php
-//echo "start";
+
 $installer = $this;
 $installer->startSetup();
 $installer->run("DROP TABLE IF EXISTS `{$installer->getTable('track/track')}`;");
@@ -21,19 +21,4 @@ CREATE TABLE `{$installer->getTable('track/track')}` (
 ");
 $installer->endSetup();
 
-
-//echo 'Running This Upgrade: '.get_class($this)."\n <br /> \n";
-//die("Exit for now");
-/*
-CREATE TABLE `{$installer->getTable('track/user')}` (
-  `user_id` int(11) NOT NULL,
-  `login_name` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `consumer_key` varchar(255) NOT NULL,
-  `consumer_secret` varchar(255) NOT NULL,
-  `status` int(11) NOT NULL,
-  PRIMARY KEY (`user_id`),
-  KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-*/
 ?>
