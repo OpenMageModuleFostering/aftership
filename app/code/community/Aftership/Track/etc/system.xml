@@ -25,13 +25,13 @@
 					<show_in_store>1</show_in_store>
 					<fields>
 						<api_key>
-							<label>API key</label>
+							<label>AfterShip API key</label>
 							<frontend_type>text</frontend_type>
 							<sort_order>10</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>0</show_in_store>
-							<comment>You can find your API key in <![CDATA[<a target='_blank' href="https://www.aftership.com/connect/magento">https://www.aftership.com/connect/magento</a>]]></comment>
+							<comment>You can find your API key in <![CDATA[<a target='_blank' href="https://www.aftership.com/apps/magento-v1">https://www.aftership.com/apps/magento-v1</a>]]></comment>
 						</api_key>
 						<status>
 							<label>Status</label>
@@ -68,6 +68,40 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</last_update>
+						<upgrade_note>
+							<label><![CDATA[<strong>Option 1 - Recommended</strong>]]></label>
+							<frontend_type>note</frontend_type>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>
+								<![CDATA[
+
+									<ol>
+										<li style="margin-bottom:10px !important;">1. <a href="https://www.aftership.com/signup" target="_blank">Sign up AfterShip account</a> for FREE</li>
+										<li style="margin-bottom:10px !important;">2. Go to <a href="https://www.aftership.com/apps/magento-v2" target="_blank">“apps”</a> and add “Magento Connector v2”</li>
+										<li style="margin-bottom:10px !important;">3. Add a SOAP/XML-RPC web services user in Magento admin page, using a role with all resources accessible.</li>
+										<li style="margin-bottom:10px !important;">4. Input your Magento version, store domain, username, API key and Store ID (optional), and click connect.</li>
+										<li>5. AfterShip will automatically import shipments created at Magento every 3 hours.</li>
+									</ol>
+								]]>
+
+							</comment>
+						</upgrade_note>
+						<upgrade_note2>
+							<label><![CDATA[<strong>Option 2</strong>]]></label>
+							<frontend_type>note</frontend_type>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>
+								<![CDATA[
+									(In case Option 1 does not work)
+								]]>
+							</comment>
+						</upgrade_note2>
 						<!--<notification>
 							<label>Notification</label>
 							<frontend_type>Multiselect</frontend_type>
