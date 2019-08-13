@@ -12,6 +12,9 @@
 					<track>
 						<table>as_track</table>
 					</track>
+					<!--<user>
+						<table>as_user</table>
+					</user>-->
 				</entities>			
 			</track_mysql4>
 			<status>
@@ -50,7 +53,7 @@
 	</global>
     <modules>
         <Aftership_Track>
-            <version>0.1.16</version>
+            <version>0.1.0</version>
         </Aftership_Track>
     </modules>
 	<frontend>

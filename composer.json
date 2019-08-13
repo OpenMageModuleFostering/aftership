@@ -3,8 +3,7 @@
     "type": "magento-module",
     "license": "GPL",
     "homepage": "",
-    "description": "AfterShip magento extension interface. Tracking number will be added to the aftership.com account at the same time when input in magento shipment.
-Please go to aftership.com to change the notification setting and value.",
+    "description": "AfterShip magento extension interface. Tracking number will be added to the aftership.com <https://aftership.com/> account at the same time when input in magento shipment. Please go to aftership.com <https://aftership.com/> to change the notification setting and value.",
     "authors": [
     {
         "name": "aftership",
