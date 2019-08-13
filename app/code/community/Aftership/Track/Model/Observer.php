@@ -73,6 +73,8 @@ class Aftership_Track_Model_Observer
                 $url_params["emails[]"]       	= $track["email"];
                 $url_params["title"]        	= $track["title"];
                 $url_params["order_id"]     	= $track["order_id"];
+                $url_params["customer_name"]    = $shipping_address_data["firstname"]." ".$shipping_address_data['lastname'];
+                $url_params["source"]     		= "magento";
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
