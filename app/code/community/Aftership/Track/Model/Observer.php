@@ -7,23 +7,6 @@ class Aftership_Track_Model_Observer
         ob_start();
         $config = Mage::getStoreConfig('aftership_options/messages');
 
-        /*if(array_key_exists("notification",$config)){
-            $notifications = explode(",",$config["notification"]);
-            if(array_search("1",$notifications)!==False){ // email
-                $is_notify_email = true;
-            }else{
-                $is_notify_email = false;
-            }
-            if(array_search("2",$notifications)!==False){ // sms
-                $is_notify_sms = true;
-            }else{
-                $is_notify_sms = false;
-            }
-        }else{
-            $is_notify_email = false;
-            $is_notify_sms = false;
-        }*/
-
         $track = $observer->getEvent()->getTrack();
         $track_data = $track->getData();
         $order_data = $track->getShipment()->getOrder()->getData();
@@ -50,8 +33,6 @@ class Aftership_Track_Model_Observer
             $track->setTrackingNumber($track_no);
 
             $track->setShipCompCode($track_data["carrier_code"]);
-            //$track->setTitle($_SERVER['HTTP_HOST'] . " " . $order_data["increment_id"]);
-            //$track->setTitle($_SERVER['HTTP_ORIGIN'] . " " . $order_data["increment_id"]);
             $track->setTitle($order_data["increment_id"]);
 
             $track->setOrderId($order_data["increment_id"]);
@@ -63,16 +44,6 @@ class Aftership_Track_Model_Observer
             if ($shipping_address_data["telephone"] && $shipping_address_data["telephone"] != "") {
                 $track->setTelephone($shipping_address_data["telephone"]);
             }
-
-            /*
-              if($is_notify_email){
-                  $track->setEmail($order_data["customer_email"]);
-              }
-
-              if($is_notify_sms){
-                  $track->setTelephone($shipping_address_data["telephone"]);
-              }*/
-
 
             if (array_key_exists("status", $config) && $config["status"]) {
                 $track->setPosted(0);
@@ -97,16 +68,15 @@ class Aftership_Track_Model_Observer
 
             foreach ($post_tracks as $track) {
                 $url = "https://api.aftership.com/v1/trackings";
-                $url_params["tracking_number"] = $track["tracking_number"];
-                $url_params["smses"]        = array($track["telephone"]);
-                $url_params["emails"]       = array($track["email"]);
-                $url_params["title"]        = $track["title"];
-                $url_params["order_id"]     = $track["order_id"];
+                $url_params["tracking_number"] 	= $track["tracking_number"];
+                $url_params["smses[]"]        	= $track["telephone"];
+                $url_params["emails[]"]       	= $track["email"];
+                $url_params["title"]        	= $track["title"];
+                $url_params["order_id"]     	= $track["order_id"];
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
-
-                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $url_params);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
