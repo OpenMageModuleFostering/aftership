@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>aftership</name>
-    <version>0.1.13</version>
+    <version>0.1.14</version>
     <stability>stable</stability>
     <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL</license>
     <channel>community</channel>
@@ -18,7 +18,7 @@
 Support V2</notes>
     <authors><author><name>aftership</name><user>aftership</user><email>support@aftership.com</email></author></authors>
     <date>2012-09-12</date>
-    <time>23:47:38</time>
+    <time>23:55:15</time>
     <contents><target name="magecommunity"><dir><dir name="Aftership"><dir name="Track"><dir name="Helper"><file name="Data.php" hash="970d03deb3e5fc478f5d86e5ff3670cb"/></dir><dir name="Model"><file name="Methods.php" hash="d9fa7ef3df0353c01662ff4bdf210f60"/><dir name="Mysql4"><dir name="Track"><file name="Collection.php" hash="336c4b0fba8db78e1222da01aa8c5744"/></dir><file name="Track.php" hash="90ad226fa98576fceb223b85fe88b642"/></dir><file name="Observer.php" hash="b5693ae8421cad1dab5254247522b0a2"/><dir name="Resource"><dir name="Mysql4"><file name="Setup.php" hash="b53f65ecc832752c8394f0da74b2f90d"/></dir></dir><file name="Track.php" hash="eb12833d5f084b0b919cbde45f8170eb"/><file name="Words.php" hash="7789e47b991f718fb3097b5e274eb71f"/></dir><dir name="controllers"><file name="IndexController.php" hash="3ee34f42957e816ff336f8f8215a218b"/></dir><dir name="etc"><file name="config.xml" hash="44b407dcd58774176a2a37191daf04a2"/><file name="system.xml" hash="857fa4fae0433c10ba468bff794ca9ef"/></dir><dir name="sql"><dir name="track_setup"><file name="mysql4-install-0.1.0.php" hash="a8f81083585c85a89e8a3097f5f3045c"/></dir></dir></dir></dir></dir></target><target name="mage"><dir><dir name="app"><dir name="etc"><dir name="modules"><file name="Aftership_Track.xml" hash="6518f61d8f390f4fc8a517b2b15b01d1"/></dir></dir></dir></dir></target></contents>
     <compatible/>
     <dependencies><required><php><min>5.2.17</min><max>6.0.0</max></php></required></dependencies>
