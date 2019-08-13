@@ -38,6 +38,7 @@ class Aftership_Track_Model_Observer {
 			$order_id = $order_data["increment_id"];
 		}
 
+		//save into db if the tracking number not exists
 		$exist_track_data = Mage::getModel('track/track')
 			->getCollection()
 			->addFieldToFilter('tracking_number', array('eq' => $track_no))
@@ -48,10 +49,8 @@ class Aftership_Track_Model_Observer {
 			$track = Mage::getModel('track/track');
 
 			$track->setTrackingNumber($track_no);
-
 			$track->setShipCompCode($track_data["carrier_code"]);
 			$track->setTitle($order_data["increment_id"]);
-
 			$track->setOrderId($order_data["increment_id"]);
 
 			if ($order_data["customer_email"] && $order_data["customer_email"] != "") {
@@ -62,8 +61,17 @@ class Aftership_Track_Model_Observer {
 				$track->setTelephone($shipping_address_data["telephone"]);
 			}
 
+			//if enabled the module, send to aftership
 			if (array_key_exists("status", $config) && $config["status"]) {
 				$track->setPosted(0);
+
+				$api_key = $config["api_key"];
+				$http_status = $this->sendTrackingRequest($api_key.'', $track_no, $shipping_address_data["telephone"], $order_data["customer_email"], $order_data["increment_id"], $order_data["increment_id"], $shipping_address_data["firstname"].' '.$shipping_address_data['lastname']);
+
+				//422: repeated
+				if ($http_status == "201" || $http_status == "422") {
+					$track->setPosted(1);
+				}
 			} else {
 				$track->setPosted(2);
 			}
@@ -71,51 +79,35 @@ class Aftership_Track_Model_Observer {
 			$track->save();
 		}
 
+
+		//send old to aftership
 		if (array_key_exists("status", $config) && $config["status"]) {
 
 			$api_key = $config["api_key"];
 
+			//get all tracking numbers that not sent
 			$post_tracks = Mage::getModel('track/track')
 				->getCollection()
 				->addFieldToFilter('posted', array('eq' => 0))
 				->getData();
 
-			$url_params = array("api_key" => $api_key . "");
 
 			foreach ($post_tracks as $track) {
 
-				$url = self::ENDPOINT_TRACKING;
-				$url_params["tracking_number"] = $track["tracking_number"];
-				$url_params["smses[]"] = $track["telephone"];
-				$url_params["emails[]"] = $track["email"];
-				$url_params["title"] = $track["title"];
-				$url_params["order_id"] = $track["order_id"];
-				$url_params["customer_name"] = $shipping_address_data["firstname"] . " " . $shipping_address_data['lastname'];
-				$url_params["source"] = "magento";
+				//echo 'tracking number: '.$track["tracking_number"].', order id: '.$track["order_id"]."\n";
 
-				$url_params = http_build_query($url_params);
+				$order = Mage::getModel('sales/order')->loadByIncrementId($track["order_id"]);
+				$tracking_data = Mage::getResourceModel('sales/order_shipment_track_collection')->setOrderFilter($order);
 
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, $url);
-				curl_setopt($ch, CURLOPT_POST, true);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $url_params);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-				//curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+				$shipping_address = array();
 
-				//handle SSL certificate problem: unable to get local issuer certificate issue
-				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); //the SSL is not correct
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //the SSL is not correct
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Length: ' . strlen($url_params)));
+				//no matter how many tracking number in this order, the shipping detail is the same
+				foreach ($tracking_data as $track_detail) {
+					$shipping_address = $track_detail->getShipment()->getOrder()->getShippingAddress()->getData();
+					break;
+				}
 
-				$response = curl_exec($ch);
-
-				$http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-				$error = curl_error($ch);
-				curl_close($ch);
-
-				$response_obj = json_decode($response, true);
+				$http_status = $this->sendTrackingRequest($api_key.'', $track["tracking_number"], $track["telephone"], $track["email"], $track["title"], $track["order_id"], $shipping_address["firstname"].' '.$shipping_address['lastname']);
 
 				//422: repeated
 				if ($http_status == "201" || $http_status == "422") {
@@ -124,17 +116,49 @@ class Aftership_Track_Model_Observer {
 					$track_obj->setPosted(1);
 					$track_obj->save();
 				}
-
-				//simulate track success post
-				/*$track_obj = Mage::getModel('track/track');
-				$track_obj->load($track["track_id"]);
-				$track_obj->setPosted(1);
-				$track_obj->save();*/
-
 			}
 		}
 
 		ob_end_clean();
+	}
+
+	public function sendTrackingRequest($api_key, $tracking_number, $telephone, $email, $title, $order_id, $customer_name) {
+		$url = self::ENDPOINT_TRACKING;
+
+		$url_params = array(
+			'api_key' => $api_key,
+			'tracking_number' => $tracking_number,
+			'smses[]' => $telephone,
+			'emails[]' => $email,
+			'title' => $title,
+			'order_id' => $order_id,
+			'customer_name' => $customer_name,
+			'source' => 'magento'
+		);
+
+		$url_params = http_build_query($url_params);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $url_params);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); //handle SSL certificate problem: unable to get local issuer certificate issue
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //the SSL is not correct
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Length: ' . strlen($url_params)));
+
+		$response = curl_exec($ch);
+
+		$http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$error = curl_error($ch);
+		curl_close($ch);
+
+		$response_obj = json_decode($response, true);
+
+		return $http_status;
 	}
 
 	public function adminSystemConfigChangedSectionAftership(Varien_Event_Observer $observer)
@@ -161,9 +185,7 @@ class Aftership_Track_Model_Observer {
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 			curl_setopt($ch, CURLOPT_HEADER, 0);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			//handle SSL certificate problem: unable to get local issuer certificate issue
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); //the SSL is not correct
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); //handle SSL certificate problem: unable to get local issuer certificate issue
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //the SSL is not correct
 
 			$response = curl_exec($ch);
