@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/aftership",
+    "name": "OpenMageModuleFostering\/aftership",
     "type": "magento-module",
     "license": "GPL",
     "homepage": "",
-    "description": "AfterShip magento extension interface. Tracking number will be added to the aftership.com https://www.aftership.com/ account at the same time when input in magento shipment. Please go to aftership.com https://www.aftership.com/ to change the notification setting and value.",
+    "description": "AfterShip magento extension interface. Tracking number will be added to the aftership.com https:\/\/www.aftership.com\/ account at the same time when input in magento shipment. Please go to aftership.com https:\/\/www.aftership.com\/ to change the notification setting and value.",
     "authors": [
-    {
-        "name": "aftership",
-        "email": "support@aftership.com"
-    }
-],
+        {
+            "name": "aftership",
+            "email": "support@aftership.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
